@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopee Automation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #1e1e2e, #252538);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      button {
+        background: linear-gradient(90deg, #4a00e0, #8e2de2);
+        border: none;
+        padding: 12px 24px;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      button:hover {
+        opacity: 0.8;
+      }
+      button:active {
+        transform: scale(0.95);
+      }
+
+      #status {
+        min-height: 100px; /* Minimal tinggi agar tidak terlalu kecil */
+        max-height: 300px; /* Batasi tinggi maksimal agar tidak memenuhi layar */
+        overflow-y: auto;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-family: "Arial", sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #fff;
+        max-width: 500px;
+        margin: auto;
+        transition: max-height 0.3s ease-in-out;
+      }
+
+      /* Styling untuk pesan log */
+      #status div {
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-weight: bold;
+        animation: fadeIn 0.3s ease-in-out;
+        opacity: 0.9;
+      }
+
+      /* Efek animasi */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Styling untuk status */
+      .info {
+        background: rgba(0, 123, 255, 0.2);
+        color: #007bff;
+        border-left: 5px solid #007bff;
+      }
+
+      .error {
+        background: rgba(255, 0, 0, 0.2);
+        color: #ff4d4d;
+        border-left: 5px solid #ff4d4d;
+      }
+
+      .success {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        border-left: 5px solid #28a745;
+      }
+
+      /* Scrollbar custom */
+      #status::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #status::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+      }
+
+      #status::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    </style>
+
+    <!-- <link href="./output.css" rel="stylesheet" /> -->
+  </head>
+  <body>
+    <h1>Shopee Automation Tools</h1>
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <button id="configButton">Open Config</button>
+    <div id="status"></div>
+    <script src="../script/renderer.js"></script>
+  </body>
+</html>

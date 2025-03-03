@@ -1,0 +1,85 @@
+{
+  "name": "shopee-automation",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development electron .",
+    "build-only": "electron-builder --win --x64",
+    "build-all": "npm run pyinstaller && electron-builder --win --x64",
+    "pyinstaller": "cd script && pyinstaller --onedir --distpath ../bin main.py && pyinstaller --onedir --distpath ../bin get_data.py && pyinstaller --onedir --distpath ../bin get_cookies.py && pyinstaller --onedir --distpath ../bin mouse_tracker.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Sistem automasi proses order shopee",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
+    "electron": "^34.0.1",
+    "electron-builder": "^25.1.8",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "open": "^10.1.0",
+    "playwright": "^1.50.0",
+    "python-shell": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.shopeeautomation.app",
+    "productName": "Shopee Automation",
+    "icon": "./assets/icon.ico",
+    "files": [
+      "bin/**/*",
+      "assets/**/*",
+      "data/**/*",
+      "view/**/*",
+      "script/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "assets",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "data",
+        "to": "data",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./assets/icon.ico",
+      "sign": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "type": "module"
+}

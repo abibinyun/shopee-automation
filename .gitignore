@@ -1,0 +1,36 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+bin
+fe
+be
+venv
+dist-ssr
+*.local
+script/build/*
+script/get_cookies.spec
+script/get_data.spec
+script/main.spec
+script/mouse_tracker.spec
+tutor.txt
+sample.txt
+
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
