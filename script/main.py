@@ -66,6 +66,7 @@ total_pesanan_p = int(config_data.get("total_pesanan", {}).get("total_pesanan_p"
 total_pesanan_l = int(config_data.get("total_pesanan", {}).get("total_pesanan_l", 0))
 testing_mode = bool(config_data.get("testing_mode", False))
 message_template = config_data.get("message_template", "")
+item_template = config_data.get("item_template", "")
 database_url = config_data.get("db_url", "")
 
 if sys.stdout:
@@ -76,57 +77,6 @@ if sys.stdout:
         
 def generate_message(template, data):
     return re.sub(r'{{(.*?)}}', lambda match: str(data.get(match.group(1).strip(), "")), template)
-
-# def find_icon(template_path, use_grayscale=True, threshold=0.6, max_attempts=5, delay=1, scale_range=(0.5, 1.5, 0.1)):
-#     """Mencari ikon di layar dengan multi-scale template matching."""
-    
-#     # Baca template dengan opsi grayscale atau warna
-#     template = cv2.imread(template_path, cv2.IMREAD_GRAYSCALE if use_grayscale else cv2.IMREAD_COLOR)
-#     if template is None:
-#         print(f"Template tidak ditemukan: {template_path}")
-#         return None
-
-#     for attempt in range(1, max_attempts + 1):
-#         screenshot = np.array(pyautogui.screenshot())
-
-#         # Konversi ke format OpenCV
-#         if use_grayscale:
-#             screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2GRAY)
-#         else:
-#             screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
-
-#         best_match = None
-#         best_val = 0
-#         best_loc = None
-#         best_scale = 1.0
-
-#         # Coba beberapa skala (zoom in & zoom out)
-#         for scale in np.arange(scale_range[0], scale_range[1], scale_range[2]):
-#             resized_template = cv2.resize(template, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
-
-#             if resized_template.shape[0] > screenshot.shape[0] or resized_template.shape[1] > screenshot.shape[1]:
-#                 continue  # Lewati jika template lebih besar dari layar
-
-#             result = cv2.matchTemplate(screenshot, resized_template, cv2.TM_CCOEFF_NORMED)
-#             _, max_val, _, max_loc = cv2.minMaxLoc(result)
-
-#             if max_val > best_val:
-#                 best_match = resized_template
-#                 best_val = max_val
-#                 best_loc = max_loc
-#                 best_scale = scale
-
-#         if best_val >= threshold:
-#             icon_center_x = best_loc[0] + (best_match.shape[1] // 2)
-#             icon_center_y = best_loc[1] + (best_match.shape[0] // 2)
-#             log_message(f"Ikon ditemukan pada ({icon_center_x}, {icon_center_y}) dengan skala {best_scale}")
-#             return icon_center_x, icon_center_y
-
-#         log_message(f"Percobaan {attempt}: Ikon {template_path} belum ditemukan, coba lagi...")
-#         time.sleep(delay)
-
-#     print(f"Gagal menemukan ikon {template_path} setelah {max_attempts} percobaan.")
-#     return None
  
 def find_icon(template_path, use_grayscale=True, position="center", threshold=0.6, max_attempts=5, delay=1, scale_range=(0.5, 1.5, 0.1), offset=10):
     """Mencari ikon di layar dengan multi-scale template matching dan menentukan titik klik berdasarkan posisi yang dipilih."""
@@ -337,8 +287,6 @@ def process_order(order):
     order_sn = order["order_sn"]
     
     items_text = ""
-    item_template = "Nama Produk: {item}\nLink Download Software: {download_link}\n\nKey / Order ID: {licenses}\n"
-    
     found_any = False
 
     for idx, item in enumerate(order["items"], start=1):
@@ -513,9 +461,6 @@ def real_cht(order):
     log_message(f"Pesan yg dikirim: \n{message}")
 
     chat_process(order["buyer_username"], message)
-
-    # while not ensure_click(i_send_msg_path, "klik kirim pesan", 2, with_click=not testing_mode):
-    #     time.sleep(3)
 
     while not ensure_click(i_hide_cht_path, "hide pesan", 2, position="top-right"):
         time.sleep(3)

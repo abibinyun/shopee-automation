@@ -74,6 +74,15 @@
             </div>
 
             <div class="shadow-lg rounded-lg w-full dark:bg-gray-900 my-5">
+              <label for="item-template" class="block text-lg font-semibold text-gray-300 dark:text-gray-200 mb-2 text-center"> Template Item </label>
+
+              <textarea
+                id="item-template"
+                name="item-template"
+                class="w-full bg-gray-500 dark:bg-gray-800 text-gray-100 dark:text-gray-200 p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-40"
+                placeholder="Masukkan template pesan..."
+              ></textarea>
+
               <label for="message-template" class="block text-lg font-semibold text-gray-300 dark:text-gray-200 mb-2 text-center"> Template Pesan </label>
 
               <textarea
@@ -125,6 +134,7 @@
       const userAgentValue = document.getElementById("userAgentInput");
       const testingMode = document.getElementById("testing-mode");
       const messageTemplate = document.getElementById("message-template");
+      const itemTemplate = document.getElementById("item-template");
 
       const dbURL = document.getElementById("db-url");
 
@@ -140,6 +150,7 @@
         userAgentValue.value = config.user_agent || "";
         testingMode.checked = config.testing_mode || false;
         messageTemplate.value = config.message_template || "";
+        itemTemplate.value = config.item_template || "";
         dbURL.value = config.db_url || "";
 
         const totalPesanan = config.total_pesanan || {};
@@ -170,6 +181,7 @@
           db_url: dbURL.value.trim(),
           testing_mode: testingMode.checked,
           message_template: messageTemplate.value.trim(),
+          item_template: itemTemplate.value.trim(),
         };
 
         const totalPesananKeys = ["total_pesanan_x", "total_pesanan_y", "total_pesanan_p", "total_pesanan_l"];

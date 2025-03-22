@@ -66,5 +66,6 @@
     "testing_mode": false,
     "waiting_time_one_order": "10",
     "message_template": "Terima kasih sudah berbelanja \ud83d\ude0a\n\nBerikut ini adalah pesanan Anda:\n\n{{ items }}\n\nSilakan gunakan lisensi sesuai dengan petunjuk yang diberikan.",
-    "db_url": "http://be.kinterstore.online/api/orders/find"
+    "db_url": "http://be.kinterstore.online/api/orders/find",
+    "item_template": "Nama Produk: {item}\nLink Download Software: {download_link}\n\nKey / Order ID: {licenses}"
 }

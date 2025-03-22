@@ -20,10 +20,18 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
+        padding: 20px;
       }
       h1 {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 600;
+        margin-bottom: 20px;
+        color: #ffffff;
+      }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px; /* space between buttons */
         margin-bottom: 20px;
       }
       button {
@@ -36,7 +44,6 @@
         border-radius: 8px;
         cursor: pointer;
         transition: 0.3s;
-        margin: 10px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
       }
       button:hover {
@@ -45,28 +52,25 @@
       button:active {
         transform: scale(0.95);
       }
-
       #status {
-        min-height: 100px; /* Minimal tinggi agar tidak terlalu kecil */
-        max-height: 300px; /* Batasi tinggi maksimal agar tidak memenuhi layar */
+        min-height: 100px;
+        max-height: 300px;
         overflow-y: auto;
         border-radius: 10px;
         padding: 15px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.3);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         font-family: "Arial", sans-serif;
         font-size: 14px;
-        line-height: 1.5;
         color: #fff;
-        max-width: 500px;
-        margin: auto;
-        transition: max-height 0.3s ease-in-out;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
       }
 
-      /* Styling untuk pesan log */
       #status div {
         padding: 8px 12px;
         border-radius: 6px;
@@ -76,7 +80,6 @@
         opacity: 0.9;
       }
 
-      /* Efek animasi */
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -88,7 +91,6 @@
         }
       }
 
-      /* Styling untuk status */
       .info {
         background: rgba(0, 123, 255, 0.2);
         color: #007bff;
@@ -107,7 +109,6 @@
         border-left: 5px solid #28a745;
       }
 
-      /* Scrollbar custom */
       #status::-webkit-scrollbar {
         width: 6px;
       }
@@ -120,16 +121,47 @@
       #status::-webkit-scrollbar-track {
         background: transparent;
       }
-    </style>
 
-    <!-- <link href="./output.css" rel="stylesheet" /> -->
+      footer {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 30px;
+      }
+
+      footer a {
+        color: #8e2de2;
+        text-decoration: none;
+      }
+
+      /* Responsiveness for smaller screens */
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 22px;
+        }
+
+        button {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+
+        #status {
+          width: 90%;
+          max-width: 400px;
+        }
+      }
+    </style>
   </head>
   <body>
     <h1>Shopee Automation Tools</h1>
-    <button id="start-btn">Start</button>
-    <button id="stop-btn">Stop</button>
-    <button id="configButton">Open Config</button>
+    <div class="button-container">
+      <button id="start-btn">Start</button>
+      <button id="stop-btn">Stop</button>
+      <button id="configButton">Open Config</button>
+    </div>
     <div id="status"></div>
+    <footer>
+      <span>Copyright @ <a href="#">Kinterstore</a></span>
+    </footer>
     <script src="../script/renderer.js"></script>
   </body>
 </html>
