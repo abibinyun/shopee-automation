@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const startBtn = document.getElementById("start-btn");
   const stopBtn = document.getElementById("stop-btn");
   const statusElement = document.getElementById("status");
@@ -30,4 +30,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     statusElement.scrollTop = statusElement.scrollHeight;
   });
+
+  window.electronAPI?.onConfigUpdated?.(() => {
+    window.electronAPI.loadConfig().then((config) => {
+      const startBtn = document.getElementById("start-btn");
+      if (config?.token) {
+        startBtn?.removeAttribute("disabled");
+      }
+    });
+  });
+
+  try {
+    const config = await window.electronAPI.loadConfig();
+    if (config && config.token) {
+      startBtn.removeAttribute("disabled");
+    } else {
+      startBtn.setAttribute("disabled", "true");
+    }
+  } catch (error) {
+    console.error("Gagal load config:", error);
+    startBtn.setAttribute("disabled", "true");
+  }
 });

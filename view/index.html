@@ -52,6 +52,20 @@
       button:active {
         transform: scale(0.95);
       }
+
+      #start-btn:disabled {
+        background: #555; /* abu-abu untuk disabled */
+        cursor: not-allowed;
+        opacity: 0.6;
+        box-shadow: none;
+        transform: none;
+      }
+
+      #start-btn:active:not(:disabled) {
+        transform: scale(0.95);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
       #status {
         min-height: 100px;
         max-height: 300px;

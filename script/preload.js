@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   startTracking: () => ipcRenderer.send("start-tracking"),
   stopTracking: () => ipcRenderer.send("stop-tracking"),
   loadConfig: () => ipcRenderer.invoke("load-config"),
+  onConfigUpdated: (callback) => ipcRenderer.on("config-updated", callback),
 });

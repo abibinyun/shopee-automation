@@ -27,14 +27,51 @@
         <textarea id="userAgentInput" placeholder="Masukkan user-agent di sini..." class="w-full h-16 p-3 bg-gray-700 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
       </div>
 
+      <!-- <div class="my-5">
+        <span class="text-s">Database Connection:</span>
+
+        <div class="flex flex-col space-y-3 p-4 bg-gray-800 rounded-lg shadow-md w-full max-w-md">
+          <div class="flex flex-col space-y-2">
+            <label for="db-url" class="text-gray-300 font-medium">DB URL</label>
+            <input id="db-url" name="db-url" type="text" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan DB URL" />
+          </div>
+
+          <div class="flex flex-col space-y-2">
+            <label for="username" class="text-gray-300 font-medium">Username</label>
+            <input id="username" name="username" type="text" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Username" />
+          </div>
+
+          <div class="flex flex-col space-y-2">
+            <label for="password" class="text-gray-300 font-medium">Password</label>
+            <input id="password" name="password" type="password" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Password" />
+          </div>
+        </div>
+      </div> -->
+
       <div class="my-5">
         <span class="text-s">Database Connection:</span>
 
-        <div class="flex flex-col">
-          <div class="flex justify-between my-1">
-            <label for="db-url">DB URL</label>
-            <input id="db-url" name="db-url" type="text" class="max-w-[70%] bg-gray-500 rounded-sm" />
+        <div class="flex flex-col space-y-3 p-4 bg-gray-800 rounded-lg shadow-md w-full max-w-md">
+          <!-- DB URL -->
+          <div class="flex flex-col space-y-2">
+            <label for="db-url" class="text-gray-300 font-medium">DB URL</label>
+            <input id="db-url" name="db-url" type="text" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="http://localhost:5002" />
           </div>
+
+          <!-- Username -->
+          <div class="flex flex-col space-y-2">
+            <label for="username" class="text-gray-300 font-medium">Username</label>
+            <input id="username" name="username" type="text" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Username" />
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col space-y-2">
+            <label for="password" class="text-gray-300 font-medium">Password</label>
+            <input id="password" name="password" type="password" class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Password" />
+          </div>
+
+          <!-- Tombol Login -->
+          <button onclick="submitLogin()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Login</button>
         </div>
       </div>
 
@@ -137,6 +174,8 @@
       const itemTemplate = document.getElementById("item-template");
 
       const dbURL = document.getElementById("db-url");
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
 
       const totalPesananX = document.getElementById("total-pesanan-x");
       const totalPesananY = document.getElementById("total-pesanan-y");
@@ -152,6 +191,8 @@
         messageTemplate.value = config.message_template || "";
         itemTemplate.value = config.item_template || "";
         dbURL.value = config.db_url || "";
+        username.value = config.username || "";
+        password.value = config.password || "";
 
         const totalPesanan = config.total_pesanan || {};
         totalPesananX.value = totalPesanan.total_pesanan_x || "";
@@ -179,6 +220,8 @@
           user_agent: userAgentValue.value.trim(),
           total_pesanan: {},
           db_url: dbURL.value.trim(),
+          username: username.value.trim(),
+          password: password.value.trim(),
           testing_mode: testingMode.checked,
           message_template: messageTemplate.value.trim(),
           item_template: itemTemplate.value.trim(),
@@ -196,6 +239,48 @@
         window.electronAPI.saveConfig(configData);
         alert("Konfigurasi berhasil disimpan!");
       });
+
+      function submitLogin() {
+        const dbUrl = document.getElementById("db-url").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        fetch(`${dbUrl}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP status ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Login sukses:", data);
+
+            // Simpan token ke localStorage
+            localStorage.setItem("accessToken", data.token);
+            localStorage.setItem("refreshToken", data.refreshToken);
+
+            // Simpan juga token ke config.json
+            window.electronAPI.saveConfig({
+              token: data.token,
+              refreshToken: data.refreshToken,
+            });
+
+            alert("Login sukses!");
+          })
+          .catch((error) => {
+            console.error("Gagal login:", error);
+            alert("Login gagal. Periksa koneksi atau kredensial!");
+          });
+      }
     </script>
   </body>
 </html>

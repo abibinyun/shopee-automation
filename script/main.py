@@ -68,6 +68,9 @@ testing_mode = bool(config_data.get("testing_mode", False))
 message_template = config_data.get("message_template", "")
 item_template = config_data.get("item_template", "")
 database_url = config_data.get("db_url", "")
+token = config_data.get("token", "")
+USERNAME = config_data.get("username", "")
+PASSWORD = config_data.get("password", "")
 
 if sys.stdout:
     try:
@@ -247,7 +250,125 @@ def load_order_list(order_list_path):
     except json.JSONDecodeError:
         return []  # Jika error parsing JSON, kembalikan []
 
+def save_config():
+    """Simpan perubahan ke file config."""
+    with open(config_file_path, "w") as file:
+        json.dump(config_data, file, indent=4)
+
+def refresh_token():
+    """Menggunakan refresh token untuk mendapatkan token baru."""
+    global token
+    refresh_token_value = config_data.get("refreshToken")
+    if not refresh_token_value:
+        print("Refresh token tidak tersedia.")
+        return None
+
+    try:
+        response = requests.post(
+            f"{database_url}/api/user/refresh",
+            json={"refreshToken": refresh_token_value},
+            timeout=30
+        )
+        response.raise_for_status()
+        new_token = response.json().get("token")
+
+        if new_token:
+            print("Token berhasil diperbarui menggunakan refresh token.")
+            config_data["token"] = new_token
+            token = new_token
+            save_config()
+            return new_token
+        else:
+            print("Gagal mendapatkan token baru dari refresh token.")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error saat refresh token: {e}")
+        return None
+
+def get_token():
+    """Ambil token dari backend untuk autentikasi dan simpan ke file config."""
+    global token  # Supaya bisa di-update di luar fungsi
+    login_url = f"{database_url}/api/login"
+    data = {"username": USERNAME, "password": PASSWORD}
+
+    try:
+        response = requests.post(login_url, json=data)
+        response.raise_for_status()
+        new_token = response.json().get("token")
+
+        if new_token:
+            print("Login sukses, token diterima!")
+            config_data["token"] = new_token  # Simpan token ke config
+            token = new_token  # Update variabel token
+            save_config()  # Simpan perubahan ke file
+            return token
+        else:
+            print("Gagal mendapatkan token!")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error login: {e}")
+        return None
+
+# V1
+# def getLicenses(order_sn, item_name, os, versi, item_amount, max_retries=3):
+#     """Mengambil lisensi dari backend dengan autentikasi JWT."""
+#     global token
+
+#     # Pastikan token tidak kosong sebelum request
+#     if not token:
+#         token = get_token()
+
+#     # Jika tetap kosong setelah mencoba login, hentikan fungsi
+#     if not token:
+#         print("Gagal mendapatkan token, tidak bisa mengakses API!")
+#         return None
+
+#     data = {
+#         "order_id": order_sn,
+#         "item_name": item_name,
+#         "os": os,
+#         "version": versi,
+#         "item_amount": item_amount
+#     }
+#     log_message(f"Data yang dikirim: \n{data}")
+
+#     HEADERS = {
+#         "Content-Type": "application/json",
+#         "Authorization": f"Bearer {token}"  # Gunakan token yang sudah diperbarui
+#     }
+
+#     retries = 0
+#     while retries < max_retries:
+#         try:
+#             response = requests.post(f"{database_url}/api/orders/find", json=data, headers=HEADERS, timeout=60)
+#             response.raise_for_status()
+            
+#             try:
+#                 response_data = response.json()
+#                 log_message(f"Response: \n{response_data}")
+#                 return response_data
+#             except ValueError:
+#                 log_message("Error: Response bukan JSON yang valid!")
+#                 return None
+
+#         except requests.exceptions.RequestException as e:
+#             log_message(f"Request error (percobaan {retries+1}/{max_retries}): {e}")
+#             retries += 1
+#             time.sleep(2)
+
+#     log_message("Gagal mendapatkan data setelah beberapa kali percobaan.")
+#     return None
+ 
 def getLicenses(order_sn, item_name, os, versi, item_amount, max_retries=3):
+    global token
+
+    if not token:
+        token = get_token()
+    if not token:
+        print("Gagal mendapatkan token, tidak bisa mengakses API!")
+        return None
+
     data = {
         "order_id": order_sn,
         "item_name": item_name,
@@ -255,18 +376,34 @@ def getLicenses(order_sn, item_name, os, versi, item_amount, max_retries=3):
         "version": versi,
         "item_amount": item_amount
     }
-    log_message(f"Data yang dikirim: \n{data}")
-
-    HEADERS = {
-        "Content-Type": "application/json"
-    }
 
     retries = 0
     while retries < max_retries:
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+
         try:
-            response = requests.post(database_url, json=data, headers=HEADERS, timeout=60)
+            response = requests.post(
+                f"{database_url}/api/orders/find",
+                json=data,
+                headers=headers,
+                timeout=60
+            )
+
+            # Deteksi token kadaluarsa atau tidak valid
+            if response.status_code == 401:
+                print("Token tidak valid atau kadaluarsa. Mencoba refresh token...")
+                new_token = refresh_token()
+                if new_token:
+                    continue  # Coba ulangi request dengan token baru
+                else:
+                    print("Gagal refresh token.")
+                    return None
+
             response.raise_for_status()
-            
+
             try:
                 response_data = response.json()
                 log_message(f"Response: \n{response_data}")
@@ -552,6 +689,7 @@ def main():
             log_message(f"❌ Error di main.py: {str(e)}\n{error_trace}")
             send_to_frontend(f"❌ Error di loop utama: {e}")
             time.sleep(30)
-
+ 
+    
 if __name__ == "__main__":
     main()
