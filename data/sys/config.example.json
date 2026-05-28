@@ -1,0 +1,38 @@
+{
+    "raw_cookies": "",
+    "fix_cookies": {},
+    "user_agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36",
+    "database_path": "",
+    "coordinate": {
+        "icon_cht_x": "0",
+        "icon_cht_y": "0",
+        "input_chat_x": "0",
+        "input_chat_y": "0",
+        "btn_send_cht_x": "0",
+        "btn_send_cht_y": "0",
+        "btn_close_cht_x": "0",
+        "btn_close_cht_y": "0",
+        "btn_send_card_x": "0",
+        "btn_send_card_y": "0",
+        "btn_send_popup_x": "0",
+        "btn_send_popup_y": "0",
+        "btn_refresh_page_x": "0",
+        "btn_refresh_page_y": "0"
+    },
+    "waiting_time": "60",
+    "total_pesanan": {
+        "total_pesanan_x": "0",
+        "total_pesanan_y": "0",
+        "total_pesanan_p": "0",
+        "total_pesanan_l": "0"
+    },
+    "testing_mode": false,
+    "waiting_time_one_order": "10",
+    "message_template": "Terima kasih sudah berbelanja 😊\n\nBerikut ini adalah pesanan Anda:\n\n{{ items }}\n\nSilakan gunakan lisensi sesuai dengan petunjuk yang diberikan.",
+    "db_url": "http://localhost:5002",
+    "item_template": "Nama Produk: {item}\nLink Download Software: {download_link}\n\nKey / Order ID: {licenses}",
+    "username": "",
+    "password": "",
+    "token": "",
+    "refreshToken": ""
+}

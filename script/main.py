@@ -15,6 +15,7 @@ from PIL import Image
 import traceback
 import re
 import requests
+import platform
 
 is_dev = os.getenv("NODE_ENV") == "development"
 
@@ -25,10 +26,13 @@ else:
     
 if is_dev:
     script_path = os.path.abspath("./script/get_data.py")
-    command = ["python", script_path, base_path]
+    command = [sys.executable, script_path, base_path]
     image_path = "./assets/screenshot/total_orders.png"
 else:
-    script_path = os.path.join(base_path, "..", "bin", "get_data", "get_data.exe")
+    if platform.system() == "Windows":
+        script_path = os.path.join(base_path, "..", "bin", "get_data", "get_data.exe")
+    else:
+        script_path = os.path.join(base_path, "..", "bin", "get_data", "get_data")
     command = [script_path, base_path]
     image_path = os.path.join(base_path, "..", "assets", "screenshot", "total_orders.png")
 
@@ -310,56 +314,6 @@ def get_token():
         print(f"Error login: {e}")
         return None
 
-# V1
-# def getLicenses(order_sn, item_name, os, versi, item_amount, max_retries=3):
-#     """Mengambil lisensi dari backend dengan autentikasi JWT."""
-#     global token
-
-#     # Pastikan token tidak kosong sebelum request
-#     if not token:
-#         token = get_token()
-
-#     # Jika tetap kosong setelah mencoba login, hentikan fungsi
-#     if not token:
-#         print("Gagal mendapatkan token, tidak bisa mengakses API!")
-#         return None
-
-#     data = {
-#         "order_id": order_sn,
-#         "item_name": item_name,
-#         "os": os,
-#         "version": versi,
-#         "item_amount": item_amount
-#     }
-#     log_message(f"Data yang dikirim: \n{data}")
-
-#     HEADERS = {
-#         "Content-Type": "application/json",
-#         "Authorization": f"Bearer {token}"  # Gunakan token yang sudah diperbarui
-#     }
-
-#     retries = 0
-#     while retries < max_retries:
-#         try:
-#             response = requests.post(f"{database_url}/api/orders/find", json=data, headers=HEADERS, timeout=60)
-#             response.raise_for_status()
-            
-#             try:
-#                 response_data = response.json()
-#                 log_message(f"Response: \n{response_data}")
-#                 return response_data
-#             except ValueError:
-#                 log_message("Error: Response bukan JSON yang valid!")
-#                 return None
-
-#         except requests.exceptions.RequestException as e:
-#             log_message(f"Request error (percobaan {retries+1}/{max_retries}): {e}")
-#             retries += 1
-#             time.sleep(2)
-
-#     log_message("Gagal mendapatkan data setelah beberapa kali percobaan.")
-#     return None
- 
 def getLicenses(order_sn, item_name, os, versi, item_amount, max_retries=3):
     global token
 

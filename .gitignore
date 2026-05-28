@@ -1,36 +1,60 @@
+# Dependencies
+node_modules
+
+# Build artifacts
+dist
+dist-ssr
+bin
+
+# Python
+venv
+__pycache__
+*.pyc
+script/build/
+script/*.spec
+
+# Runtime data (contains sensitive info)
+data/sys/config.json
+data/sys/order_list.json
+data/app.log
+data/template/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Subfolders with own repos (now part of monorepo)
+fe/.git
+be/.git
+
 # Logs
 logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-bin
-fe
-be
-venv
-dist-ssr
-*.local
-script/build/*
-script/get_cookies.spec
-script/get_data.spec
-script/main.spec
-script/mouse_tracker.spec
-tutor.txt
-sample.txt
-
-
-# Editor directories and files
+# OS & Editor
+.DS_Store
+Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Misc
+tutor.txt
+sample.txt
+package.json.bak
+*.exe
+
+# Sequelize CLI model files (models defined in models/index.js)
+be/models/license.js
+be/models/order.js
+be/models/orderlicenses.js
+be/models/software.js
+be/models/softwareversion.js
+be/models/sync.js
+be/models/user.js

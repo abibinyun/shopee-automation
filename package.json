@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development electron .",
-    "build-only": "electron-builder --win --x64",
-    "build-all": "npm run pyinstaller && electron-builder --win --x64",
+    "build-only": "electron-builder --linux --win --x64",
+    "build-all": "npm run pyinstaller && electron-builder --linux --win --x64",
     "pyinstaller": "cd script && pyinstaller --onedir --distpath ../bin main.py && pyinstaller --onedir --distpath ../bin get_data.py && pyinstaller --onedir --distpath ../bin get_cookies.py && pyinstaller --onedir --distpath ../bin mouse_tracker.py"
   },
   "keywords": [],
@@ -30,7 +30,6 @@
   "build": {
     "appId": "com.shopeeautomation.app",
     "productName": "Shopee Automation",
-    "icon": "./assets/icon.ico",
     "files": [
       "bin/**/*",
       "assets/**/*",
@@ -67,7 +66,6 @@
       "target": [
         "nsis"
       ],
-      "icon": "./assets/icon.ico",
       "sign": false
     },
     "mac": {
