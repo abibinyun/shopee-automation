@@ -11,7 +11,8 @@ const authRoutes = require("./routes/authRoutes");
 const app = express();
 const PORT = process.env.PORT || 5002;
 
-const allowedOrigins = ["http://data.kinterstore.online", "http://localhost:5173"];
+// const allowedOrigins = ["http://data.dejavustore.online", "http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5174"];
 
 app.use(
   cors({

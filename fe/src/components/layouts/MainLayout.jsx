@@ -59,7 +59,7 @@ const MainLayout = () => {
             }
           }}
           items={[
-            { key: "", label: "Kinterstore", style: styleLogo },
+            { key: "", label: "DejavuStore", style: styleLogo },
             { key: "/", icon: <UserOutlined />, label: "Home" },
             { key: "/orders", icon: <VideoCameraOutlined />, label: "Pesanan" },
             { key: "/software", icon: <UploadOutlined />, label: "Software" },
